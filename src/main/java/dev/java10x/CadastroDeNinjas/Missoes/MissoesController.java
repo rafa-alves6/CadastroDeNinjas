@@ -1,12 +1,33 @@
 package dev.java10x.CadastroDeNinjas.Missoes;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/missoes")
+@RequiredArgsConstructor
 public class MissoesController {
-    @GetMapping("/missoes/cadastrar")
-    public String cadastrar(){return "Cadastre aqui";}
+    private final MissoesService service;
+
+    @GetMapping
+    public List<MissoesModel> listar() {
+        return service.listarTodas();
+    }
+
+    @PostMapping
+    public MissoesModel cadastrar(@RequestBody MissoesModel missao) {
+        return service.salvar(missao);
+    }
+
+    @GetMapping("/{id}")
+    public MissoesModel buscar(@PathVariable Long id) {
+        return service.buscarPorId(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletar(@PathVariable Long id) {
+        service.deletar(id);
+    }
 }

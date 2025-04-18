@@ -1,13 +1,27 @@
 package dev.java10x.CadastroDeNinjas.Ninjas;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-@RestController // Para sinalizar que se trata de uma class Controller
-@RequestMapping // Usado para fazer requisição de um método {GET, PUT, POST, PATCH, DELETE} (pra cada response, precisa de um get...?)
+import java.util.List;
+
+@RestController
+@RequestMapping("/ninjas")
+@RequiredArgsConstructor
 public class NinjaController {
-    @GetMapping("/boasvindas") // Definição da rota (localhost:8080{ boasvindas }) *pelo apache tomcat*
+    private final NinjaService service;
+
+    @GetMapping
+    public List<NinjaModel> listar() {
+        return service.listarTodos();
+    }
+
+    @PostMapping
+    public NinjaModel cadastrar(@RequestBody NinjaModel ninja) {
+        return service.salvar(ninja);
+    }
+
+    @GetMapping("/boasvindas")
     public String boasVindas() {
         return "Olá! Seja bem-vindo.";
     }
